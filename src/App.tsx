@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react'
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 
 type TodoType = Readonly<{
   id: string
@@ -16,85 +16,85 @@ function toggleTodo(todo: TodoType): TodoType {
 }
 
 function completeTodo(todo: TodoType): CompletedTodoType {
-  return {...todo, done: true}
+  return { ...todo, done: true }
 }
 
 function isTodoCompleted(todo: TodoType): boolean {
   return todo.done
 }
 
-
 function App() {
-  
   const [todos, setTodos] = useState<TodoType[]>([])
 
   const [inCompletedItemsCount, setInCompletedItemsCount] = useState<number>(0)
 
   // restore todos from localStorage
   useEffect(() => {
-    const todosString = localStorage.getItem("todos");
+    const todosString = localStorage.getItem('todos')
 
     if (todosString != null) {
       try {
-        const t = JSON.parse(todosString) as TodoType[];
+        const t = JSON.parse(todosString) as TodoType[]
         // just a simple test here
         if (Array.isArray(t)) {
-          setTodos(t);
+          setTodos(t)
         }
       } catch {
         // seems this line never hits..
-        setTodos([]);
-        console.error("failed to restore todos");
+        setTodos([])
+        console.error('failed to restore todos')
       }
     }
-  }, []);
+  }, [])
 
   // store todos to localStorage
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos])
 
   // when todos changed, update the counter
   useEffect(() => {
-    setInCompletedItemsCount(todos.filter((t) => !t.done).length);
-  }, [todos]);
+    setInCompletedItemsCount(todos.filter((t) => !t.done).length)
+  }, [todos])
 
   const toggleTodoItem = (id: string) => {
-    setTodos(prevTodos => prevTodos.map(todo => (
-      todo.id === id ? toggleTodo(todo) : todo
-    )))
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) => (todo.id === id ? toggleTodo(todo) : todo))
+    )
   }
 
   const deleteTodoItem = (id: string) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id))
+  }
 
-  const [ newTodoText, setNewTodoText ] = useState('')
+  const [newTodoText, setNewTodoText] = useState('')
 
   const addNewTodo = () => {
     const text = newTodoText
-    
-    if (text.trim() === '') { return }
+
+    if (text.trim() === '') {
+      return
+    }
 
     const newTodo: TodoType = {
       text,
       done: false,
-      id: uuidv4()
+      id: uuidv4(),
     }
 
-    setTodos(prevTodos => [ newTodo, ...prevTodos])
+    setTodos((prevTodos) => [newTodo, ...prevTodos])
 
     setNewTodoText('')
   }
 
   const onFormSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    
+    event.preventDefault()
+
     addNewTodo()
-  };
+  }
 
   const clearCompleted = () => {
-    setTodos((prevTodos) => prevTodos.filter((t) => !t.done));
+    setTodos((prevTodos) => prevTodos.filter((t) => !t.done))
   }
 
   return (
@@ -108,7 +108,7 @@ function App() {
               <input
                 value={newTodoText}
                 onChange={(event) => {
-                  setNewTodoText(event.target.value);
+                  setNewTodoText(event.target.value)
                 }}
                 className="w-full px-3 py-4 duration-300 outline-none hover:ring-1 ring-gray-300"
                 type="text"
@@ -116,13 +116,18 @@ function App() {
               />
             </form>
             {/* display items */}
-            <div className={`text-gray-500 ${todos.length > 0 ? '' : 'hidden'}`}>
+            <div
+              className={`text-gray-500 ${todos.length > 0 ? '' : 'hidden'}`}
+            >
               {todos.map((todo) => (
-                <div className="flex items-center py-3 text-2xl border-t-2" key={todo.id}>
+                <div
+                  className="flex items-center py-3 text-2xl border-t-2"
+                  key={todo.id}
+                >
                   <input
                     className="w-6 h-6"
                     onChange={() => {
-                      toggleTodoItem(todo.id);
+                      toggleTodoItem(todo.id)
                     }}
                     type="checkbox"
                     checked={todo.done}
@@ -130,7 +135,7 @@ function App() {
 
                   <div
                     className={`text-gray-700 ml-5 ${
-                      isTodoCompleted(todo) ? "text-gray-200 line-through" : ""
+                      isTodoCompleted(todo) ? 'text-gray-200 line-through' : ''
                     }`}
                   >
                     {todo.text}
@@ -139,7 +144,7 @@ function App() {
                   <button
                     className="ml-auto duration-300 opacity-50 hover:opacity-100"
                     onClick={() => {
-                      deleteTodoItem(todo.id);
+                      deleteTodoItem(todo.id)
                     }}
                   >
                     &#x2715;
@@ -151,7 +156,7 @@ function App() {
                 <button
                   onClick={clearCompleted}
                   className={`px-3 ml-auto bg-gray-200 rounded-lg ${
-                    inCompletedItemsCount === todos.length ? "hidden" : ""
+                    inCompletedItemsCount === todos.length ? 'hidden' : ''
                   }`}
                 >
                   clear completed
@@ -162,7 +167,7 @@ function App() {
         </div>
       </div>
     </React.Fragment>
-  );
+  )
 }
 
 export default App
