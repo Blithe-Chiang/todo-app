@@ -21,5 +21,10 @@
     "tailwindcss": "^2.2.15",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "semi": false
   }
 }
