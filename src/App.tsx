@@ -71,10 +71,11 @@ function App() {
 
   const [ newTodoText, setNewTodoText ] = useState('')
 
-  const addNewTodo = (event: FormEvent) => {
-    event.preventDefault();
-    
+  const addNewTodo = () => {
     const text = newTodoText
+    
+    if (text.trim() === '') { return }
+
     const newTodo: TodoType = {
       text,
       done: false,
@@ -84,6 +85,12 @@ function App() {
     setTodos(prevTodos => [ newTodo, ...prevTodos])
 
     setNewTodoText('')
+  }
+
+  const onFormSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    
+    addNewTodo()
   };
 
   const clearCompleted = () => {
@@ -97,7 +104,7 @@ function App() {
           <div className="px-5 py-5 mx-auto space-y-5 bg-white md:w-3/4 sm:w-full">
             <div className="text-center text-red-300 text-7xl">todos</div>
             {/* add new item */}
-            <form onSubmit={addNewTodo}>
+            <form onSubmit={onFormSubmit}>
               <input
                 value={newTodoText}
                 onChange={(event) => {
