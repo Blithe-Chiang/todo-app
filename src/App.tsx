@@ -148,7 +148,14 @@ function App() {
               ))}
               <div className="flex items-baseline px-3">
                 <span>{inCompletedItemsCount} items left</span>
-                <button onClick={clearCompleted} className="px-3 ml-auto bg-gray-200 rounded-lg">clear completed</button>
+                <button
+                  onClick={clearCompleted}
+                  className={`px-3 ml-auto bg-gray-200 rounded-lg ${
+                    inCompletedItemsCount === todos.length ? "hidden" : ""
+                  }`}
+                >
+                  clear completed
+                </button>
               </div>
             </div>
           </div>
