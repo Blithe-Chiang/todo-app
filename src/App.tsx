@@ -33,17 +33,11 @@ function App() {
     const todosString = localStorage.getItem('todos')
 
     if (todosString != null) {
-      try {
         const t = JSON.parse(todosString) as TodoType[]
         // just a simple test here
         if (Array.isArray(t)) {
           setTodos(t)
         }
-      } catch {
-        // seems this line never hits..
-        setTodos([])
-        console.error('failed to restore todos')
-      }
     }
   }, [])
 
