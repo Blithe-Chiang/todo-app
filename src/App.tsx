@@ -1,32 +1,27 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-type TodoType = Readonly<{
-  id: string
-  text: string
-  done: boolean
-}>
-
-type CompletedTodoType = TodoType & {
-  readonly done: true
-}
+import { TodoItem } from './components/TodoItem'
+import { TodoType } from './types/TodoType'
 
 function toggleTodo(todo: TodoType): TodoType {
   return { ...todo, done: !todo.done }
 }
 
-function completeTodo(todo: TodoType): CompletedTodoType {
-  return { ...todo, done: true }
-}
+type DisplayFilter = (todo: TodoType) => boolean
 
-function isTodoCompleted(todo: TodoType): boolean {
-  return todo.done
-}
+const allFilter: DisplayFilter = (todo: TodoType) => true
+
+const activeFilter: DisplayFilter = (todo: TodoType) => !todo.done
+
+const completedFilter: DisplayFilter = (todo: TodoType) => todo.done
 
 function App() {
   const [todos, setTodos] = useState<TodoType[]>([])
 
   const [inCompletedItemsCount, setInCompletedItemsCount] = useState<number>(0)
+
+  const [filter, setFilter] = useState<DisplayFilter>(() => allFilter)
 
   // restore todos from localStorage
   useEffect(() => {
@@ -91,22 +86,6 @@ function App() {
     setTodos((prevTodos) => prevTodos.filter((t) => !t.done))
   }
 
-  type Filter = (todo: TodoType) => boolean
-
-  const [filter, setFilter] = useState<Filter>(() => allFilter)
-
-  function allFilter(todo: TodoType): boolean {
-    return true
-  }
-
-  function activeFilter(todo: TodoType): boolean {
-    return !todo.done
-  }
-
-  function completedFilter(todo: TodoType): boolean {
-    return todo.done
-  }
-
   return (
     <React.Fragment>
       <div className="min-h-screen pt-10 bg-gray-100">
@@ -130,38 +109,14 @@ function App() {
               className={`text-gray-500 ${todos.length > 0 ? '' : 'hidden'}`}
             >
               {todos.filter(filter).map((todo) => (
-                <div
-                  className="flex items-center py-3 text-2xl border-t-2"
+                <TodoItem
                   key={todo.id}
-                >
-                  <input
-                    className="w-6 h-6"
-                    onChange={() => {
-                      toggleTodoItem(todo.id)
-                    }}
-                    type="checkbox"
-                    checked={todo.done}
-                  />
-
-                  <div
-                    className={`text-gray-700 ml-5 ${
-                      isTodoCompleted(todo) ? 'text-gray-200 line-through' : ''
-                    }`}
-                  >
-                    {todo.text}
-                  </div>
-
-                  <button
-                    className="ml-auto duration-300 opacity-50 hover:opacity-100"
-                    onClick={() => {
-                      deleteTodoItem(todo.id)
-                    }}
-                  >
-                    &#x2715;
-                  </button>
-                </div>
+                  todo={todo}
+                  toggleTodoItem={toggleTodoItem}
+                  deleteTodoItem={deleteTodoItem}
+                />
               ))}
-              <div className="grid grid-cols-4 px-3">
+              <div className="grid grid-cols-4">
                 <span>{inCompletedItemsCount} items left</span>
                 {/* filters */}
                 <div className="flex justify-center col-span-2 space-x-4">
