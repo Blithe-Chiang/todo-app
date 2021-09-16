@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { TodoType } from '../types/TodoType'
 
@@ -6,6 +6,7 @@ export type TodoItemPropsType = {
   todo: TodoType
   toggleTodoItem: Function
   deleteTodoItem: Function
+  updateTodoText: Function
 }
 
 function isTodoCompleted(todo: TodoType): boolean {
@@ -16,7 +17,16 @@ export function TodoItem({
   todo,
   toggleTodoItem,
   deleteTodoItem,
+  updateTodoText,
 }: TodoItemPropsType) {
+  const [newText, setNewText] = useState<string>(todo.text)
+
+  const changeText = () => {
+    if (newText === todo.text) return
+    if (newText.trim() === '') return
+
+    updateTodoText(todo.id, newText)
+  }
   return (
     <div className="flex items-center py-3 text-2xl border-t-2">
       <input
@@ -28,17 +38,23 @@ export function TodoItem({
         checked={todo.done}
       />
 
-      <div className="ml-5">
-        <div
-          className={`text-gray-700 ${
-            isTodoCompleted(todo) ? 'text-gray-200 line-through' : ''
+      <div className="flex-1 mx-5">
+        <input
+          autoFocus
+          className={`w-full bg-transparent outline-none ${
+            isTodoCompleted(todo) ? 'line-through' : ''
           }`}
-        >
-          {todo.text}
-        </div>
+          type="text"
+          onBlur={changeText}
+          value={newText}
+          disabled={isTodoCompleted(todo)}
+          onChange={(event) => {
+            setNewText(event.target.value)
+          }}
+        />
       </div>
       <button
-        className="ml-auto duration-300 opacity-50 hover:opacity-100"
+        className="duration-300 opacity-50 hover:opacity-100"
         onClick={() => {
           deleteTodoItem(todo.id)
         }}

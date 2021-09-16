@@ -56,6 +56,19 @@ function App() {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id))
   }
 
+  const updateTodoText = (id: string, newText: string) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id
+          ? {
+              ...todo,
+              text: newText,
+            }
+          : todo
+      )
+    )
+  }
+
   const [newTodoText, setNewTodoText] = useState('')
 
   const addNewTodo = () => {
@@ -114,6 +127,7 @@ function App() {
                   todo={todo}
                   toggleTodoItem={toggleTodoItem}
                   deleteTodoItem={deleteTodoItem}
+                  updateTodoText={updateTodoText}
                 />
               ))}
               <div className="grid grid-cols-4">
