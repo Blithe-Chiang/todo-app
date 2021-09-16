@@ -108,6 +108,7 @@ function App() {
             {/* add new item */}
             <form onSubmit={onFormSubmit}>
               <input
+                autoFocus
                 value={newTodoText}
                 onChange={(event) => {
                   setNewTodoText(event.target.value)

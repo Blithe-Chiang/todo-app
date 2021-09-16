@@ -40,7 +40,6 @@ export function TodoItem({
 
       <div className="flex-1 mx-5">
         <input
-          autoFocus
           className={`w-full bg-transparent outline-none ${
             isTodoCompleted(todo) ? 'line-through' : ''
           }`}
