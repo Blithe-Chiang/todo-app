@@ -110,8 +110,8 @@ function App() {
   return (
     <React.Fragment>
       <div className="min-h-screen pt-10 bg-gray-100">
-        <div className="container mx-auto">
-          <div className="px-5 py-5 mx-auto space-y-5 bg-white md:w-3/4 sm:w-full">
+        <div className="max-w-2xl mx-auto">
+          <div className="px-5 py-5 mx-auto space-y-5 bg-white sm:w-full">
             <div className="text-center text-red-300 text-7xl">todos</div>
             {/* add new item */}
             <form onSubmit={onFormSubmit}>
